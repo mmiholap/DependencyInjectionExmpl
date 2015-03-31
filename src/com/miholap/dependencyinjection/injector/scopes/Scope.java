@@ -1,10 +1,11 @@
 package com.miholap.dependencyinjection.injector.scopes;
 
 
+import com.miholap.dependencyinjection.injector.Factories.ObjectFactory;
 import com.miholap.dependencyinjection.service.MessageService;
 
 public  interface Scope {
-    MessageService get(Class< ? extends MessageService> clazz);
-
     String getName();
+
+    Object get(String beanName, ObjectFactory objectFactory);
 }
