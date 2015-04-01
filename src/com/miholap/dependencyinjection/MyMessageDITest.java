@@ -1,9 +1,8 @@
 package com.miholap.dependencyinjection;
 
 import com.miholap.dependencyinjection.consumer.Consumer;
-import com.miholap.dependencyinjection.injector.EmailServiceInjector;
-import com.miholap.dependencyinjection.injector.MessageServiceInjector;
-import com.miholap.dependencyinjection.injector.SMSServiceInjector;
+import com.miholap.dependencyinjection.injector.generalInjector.ApplicationInjector;
+import com.miholap.dependencyinjection.injector.generalInjector.Injector;
 
 public class MyMessageDITest {
 
@@ -11,18 +10,11 @@ public class MyMessageDITest {
 		String msg = "Hi All";
 		String email = "user@di.com";
 		String phone = "123456789";
-		MessageServiceInjector injector = null;
-		Consumer app = null;
-		
-		//Send email
-		injector = new EmailServiceInjector();
-		app = injector.getConsumer();
+
+		Injector injector = new ApplicationInjector();
+
+		Consumer app = (Consumer)injector.getBean("consumer");
 		app.processMessages(msg, email);
-		
-		//Send SMS
-		injector = new SMSServiceInjector();
-		app = injector.getConsumer();
-		app.processMessages(msg, phone);
 	}
 
 }

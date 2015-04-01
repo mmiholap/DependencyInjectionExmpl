@@ -16,8 +16,9 @@ public class ApplicationBeanDefinitionReader extends BeanDefinitionReader {
 
         Definition<Consumer> consumerDefinition = new Definition<>();
         consumerDefinition.setObjectClass(MyDIApplication.class);
-        Map<String,Object> consumerProperties = new HashMap<>();
-        consumerProperties.put("service", EmailServiceImpl.class);
+        Map<String,Definition<Consumer>.Property> consumerProperties = new HashMap<>();
+        consumerProperties.put("service",
+                consumerDefinition.new Property("smsService",ValueKinds.REFERENCE));
         consumerDefinition.setProperties(consumerProperties);
         definitions.put("consumer",consumerDefinition);
 
@@ -28,7 +29,7 @@ public class ApplicationBeanDefinitionReader extends BeanDefinitionReader {
 
         Definition<MessageService> smsServiceDefinition = new Definition<>();
         smsServiceDefinition.setObjectClass(SMSServiceImpl.class);
-        definitions.put("smsService",emailServiceDefinition);
+        definitions.put("smsService",smsServiceDefinition);
 
         return definitions;
     }

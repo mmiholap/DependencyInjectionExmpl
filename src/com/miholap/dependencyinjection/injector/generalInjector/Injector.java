@@ -50,14 +50,13 @@ public abstract class Injector {
         factories.put(ApplicationObjectFactory.class,new ApplicationObjectFactory(beanDefinitions));
     }
 
-    private Map<String, Scope> initDefaultScopes() {
+    private void initDefaultScopes() {
         Reflections reflections =
                 new Reflections("com.miholap.dependencyinjection.injector.scopes");
 
         Set<Class<? extends Scope>> allScopes =
                 reflections.getSubTypesOf(Scope.class);
 
-        Map<String, Scope> scopes = new HashMap<>();
         allScopes.forEach(clazz -> {
             try {
                 Scope scope = clazz.newInstance();
@@ -66,7 +65,6 @@ public abstract class Injector {
                 e.printStackTrace();
             }
         });
-        return scopes;
     }
 
     public Map<String, Scope> getScopes() {

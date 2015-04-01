@@ -1,15 +1,12 @@
 package com.miholap.dependencyinjection.injector.Factories;
 
-import com.miholap.dependencyinjection.consumer.Consumer;
+import com.miholap.dependencyinjection.Util;
 import com.miholap.dependencyinjection.injector.Context.BeanDefinitionReader;
 import com.miholap.dependencyinjection.injector.Context.Definition;
-import com.miholap.dependencyinjection.service.MessageService;
+import com.miholap.dependencyinjection.injector.Context.ValueKinds;
 
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.Set;
-
-import static org.reflections.ReflectionUtils.*;
 
 public class ApplicationObjectFactory extends ObjectFactory {
 
@@ -21,25 +18,40 @@ public class ApplicationObjectFactory extends ObjectFactory {
     public Object getBean(String beanName) {
         Definition definition = getDefinitionByBeanName(beanName);
         final Class objectClass = definition.getObjectClass();
-        final Map<String,Object> properties = definition.getProperties();
-        Object initializedObject = null;
+        final Map<String,Definition.Property> properties = definition.getProperties();
+
         try {
-            initializedObject = objectClass.newInstance();
-            if (properties.size() > 0 ) {
-                properties.forEach( (fieldName,value) -> {
-/*                    try {
-                        objectClass.getDeclaredField(fieldName).getS;
-                    } catch (NoSuchFieldException e) {
+            final Object initializedObject = objectClass.newInstance();
+            if (properties!= null && properties.size() > 0 ) {
+                properties.forEach( (fieldName,property) -> {
+
+                    Method setter = Util.getSetter(fieldName, objectClass);
+
+                    if (property.getKind() == ValueKinds.VALUE){
+                        throw new RuntimeException("unimplemented VALUE field initialization");
+                    }
+
+                    Definition propDef = getDefinitionByBeanName(property.getValue());
+                    if(propDef == null) {
+                        try {
+                            setter.invoke(initializedObject,null);
+                            return;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    Class propClass = propDef.getObjectClass();
+                    Object value = propDef.getScope().get(property.getValue(), ApplicationObjectFactory.this);
+                    try {
+                        setter.invoke(initializedObject,propClass.cast(value));
+                    } catch (Exception e) {
                         e.printStackTrace();
-                    }*/
+                    }
+
                 });
 
-                Set<Method> objectSetters = getAllMethods(objectClass,
-                        withPrefix("set"),
-                        withParametersCount(1));
-                if (objectSetters.size() > 0) {
-
-                } else return null;
+                return initializedObject;
 
             } else{
                 return initializedObject;
