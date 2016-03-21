@@ -4,5 +4,5 @@ import com.miholap.dependencyinjection.consumer.Consumer;
 
 public interface MessageServiceInjector {
 
-	public Consumer getConsumer();
+    public Consumer getConsumer();
 }

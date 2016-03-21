@@ -6,11 +6,11 @@ import com.miholap.dependencyinjection.service.EmailServiceImpl;
 
 public class EmailServiceInjector implements MessageServiceInjector {
 
-	@Override
-	public Consumer getConsumer() {
-		MyDIApplication app = new MyDIApplication();
-		app.setService(new EmailServiceImpl());
-		return app;
-	}
+    @Override
+    public Consumer getConsumer() {
+        MyDIApplication app = new MyDIApplication();
+        app.setService(new EmailServiceImpl());
+        return app;
+    }
 
 }

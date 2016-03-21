@@ -2,5 +2,5 @@ package com.miholap.dependencyinjection.consumer;
 
 public interface Consumer {
 
-	void processMessages(String msg, String rec);
+    void processMessages(String msg, String rec);
 }

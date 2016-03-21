@@ -2,8 +2,8 @@ package com.miholap.legacy;
 
 public class EmailService {
 
-	public void sendEmail(String message, String receiver){
-		//logic to send email
-		System.out.println("Email sent to "+receiver+ " with Message="+message);
-	}
+    public void sendEmail(String message, String receiver) {
+        //logic to send email
+        System.out.println("Email sent to " + receiver + " with Message=" + message);
+    }
 }
